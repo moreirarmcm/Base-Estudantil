@@ -1,7 +1,7 @@
 USE UJLBase
 
 BEGIN TRAN
-DECLARE @ApenasTeste INT = 1
+DECLARE @ApenasTeste INT = 0
 
 --== Execute esse script até o retorno ser "0 linhas afetadas" ==
 
@@ -14,7 +14,7 @@ DECLARE @CodInstituicao INT = (
 										WHERE i.Nome = ii.Nome
 										AND i.GrauAcademico = ii.GrauAcademico
 										AND i.Polo = ii.Polo
-										AND i.Curso = ii.Curso
+										--AND i.Curso = ii.Curso Curso agora está na Membro
 											GROUP BY GrauAcademico, Nome,Polo 
 										HAVING COUNT(*) > 1
 										--ORDER BY ii.Nome
@@ -31,18 +31,7 @@ UPDATE me SET CodigoInstituicao = @CodInstituicao
 										FROM Instituicao i
 											WHERE i.Nome = @NomeInstituicao
 									)
-UPDATE il SET CodigoInstituicao = @CodInstituicao
-	FROM Ilha il
-		WHERE il.CodigoInstituicao IN (SELECT codigo
-										FROM Instituicao i
-											WHERE i.Nome = @NomeInstituicao
-									)
-UPDATE na SET CodigoInstituicao = @CodInstituicao
-	FROM Naufrago na
-		WHERE na.CodigoInstituicao IN (SELECT codigo
-										FROM Instituicao i
-											WHERE i.Nome = @NomeInstituicao
-									)
+
 
 -- Deletando as intituições duplicadas na tabela Instituicao
 DELETE Instituicao
